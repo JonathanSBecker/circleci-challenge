@@ -32,8 +32,7 @@ jobs:
       - aws-cli/setup:
           profile_name: OIDC-USER
           role_arn: "arn:aws:iam::777439696190:role/CircleCI"
-    dockerfile: Dockerfile
-    path: .
+    dockerfile: ./Dockerfile
     profile_name: OIDC-USER
     repo: test
     tag: CIRCLE_SHA1
@@ -51,25 +50,3 @@ jobs:
       - aws-ecr/build_and_push_image
 
 workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build_and_test
-      - configure_role_arn:
-          requires:
-            - build_and_test
-          filters:
-            branches:
-              only: main
-      - push_to_ecr:
-          requires:
-            - configure_role_arn
-          filters:
-            branches:
-              only: main
-      - deploy_to_ecs:
-          requires:
-            - push_to_ecr
-          filters:
-            branches:
-              only: main
