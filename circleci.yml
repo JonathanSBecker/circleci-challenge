@@ -1,0 +1,75 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+  aws-ecr: circleci/aws-ecr@9.3.7
+  aws-cli: circleci/aws-cli@5.4.1
+
+jobs:
+  test:
+    steps:
+      - checkout
+      - run:
+          name: Run Jest tests
+          command: npm test
+
+  configure_role_arn:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile_name: default
+      - aws-cli/role_arn_setup:
+          role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+          aws-region: 'us-east-1'
+          source_profile: default
+      - run: >-
+          aws sts assume-role --role_arn
+          "arn:aws:iam::777439696190:role/CircleCI" --role_session_name
+          AWSCLI-Session
+
+  aws-ecr/build_and_push_image:
+    auth:
+      - aws-cli/setup:
+          profile_name: OIDC-USER
+          role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+    dockerfile: Dockerfile
+    path: .
+    profile_name: OIDC-USER
+    repo: test
+    tag: CIRCLE_SHA1
+
+  aws-ecs/deploy_service_update:
+    auth:
+      - aws-cli/setup:
+          profile_name: OIDC-USER
+          role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+    cluster: test-cluster
+    container_image_name_updates: container=${test}-service,tag=${CIRCLE_SHA1}
+    family: test-service
+    profile_name: OIDC-USER
+    requires:
+      - aws-ecr/build_and_push_image
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_and_test
+      - configure_role_arn:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: main
+      - push_to_ecr:
+          requires:
+            - configure_role_arn
+          filters:
+            branches:
+              only: main
+      - deploy_to_ecs:
+          requires:
+            - push_to_ecr
+          filters:
+            branches:
+              only: main

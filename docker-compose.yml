@@ -1,0 +1,30 @@
+services:
+  test-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: "dbmate_demo"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbmate-up:
+    image: amacneil/dbmate
+    restart: on-failure
+    depends_on:
+      - test-db
+    environment:
+      DATABASE_URL: "mysql://root:password@test-db:3306/dbmate_demo"
+    volumes:
+      - ./db/migrations:/db/migrations
+    entrypoint: ["dbmate", "up"]
+
+volumes:
+  mysql-data:
