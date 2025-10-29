@@ -20,7 +20,6 @@ workflows:
       - test
 
       - aws-ecr/build_and_push_image:
-          account_id: "777439696190"
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
