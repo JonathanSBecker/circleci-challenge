@@ -33,7 +33,6 @@ workflows:
             - test
 
       - aws-ecs/deploy_service_update:
-          account_id: ${AWS_ACCOUNT_ID}
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
