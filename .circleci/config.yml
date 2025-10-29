@@ -35,14 +35,14 @@ workflows:
       - test
 
       - aws-ecr/build_and_push_image:
-          account_id: ${AWS_ACCOUNT_ID}
+          account_id: 777439696190
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
                 role_arn: ${IAM_ARN}
           profile_name: OIDC-USER
           repo: test
-          tag: testing
+          tag: ${CIRCLE_SHA1}
           requires:
             - test
 
