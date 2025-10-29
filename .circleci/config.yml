@@ -14,21 +14,6 @@ jobs:
           name: Run tests
           command: npm install; npm test
 
-  configure_role_arn:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile_name: default
-      - aws-cli/role_arn_setup:
-          role_arn: ${IAM_ARN}
-          aws-region: 'us-east-1'
-          source_profile: default
-      - run: >-
-          aws sts assume-role --role_arn
-          "${IAM_ARN}" --role_session_name
-          AWSCLI-Session
-
 workflows:
   build_and_deploy:
     jobs:
