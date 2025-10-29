@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
-  aws-ecr: circleci/aws-ecr@9.7.0
+  aws-ecr: circleci/aws-ecr@9.6.0
   aws-cli: circleci/aws-cli@5.4.1
   aws-ecs: circleci/aws-ecs@7.1.0
 
@@ -35,7 +35,7 @@ workflows:
       - test
 
       - aws-ecr/build_and_push_image:
-          account_id: '777439696190'
+          account_id: ${AWS_ACCOUNT_ID}
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
