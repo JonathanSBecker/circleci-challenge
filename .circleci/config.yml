@@ -1,11 +1,13 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
-  aws-ecr: circleci/aws-ecr@9.3.7
+  aws-ecr: circleci/aws-ecr@9.7.0
   aws-cli: circleci/aws-cli@5.4.1
+  aws-ecs: circleci/aws-ecs@7.1.0
 
 jobs:
   test:
+    executor: node/default
     steps:
       - checkout
       - run:
@@ -27,26 +29,32 @@ jobs:
           "arn:aws:iam::777439696190:role/CircleCI" --role_session_name
           AWSCLI-Session
 
-  aws-ecr/build_and_push_image:
-    auth:
-      - aws-cli/setup:
-          profile_name: OIDC-USER
-          role_arn: "arn:aws:iam::777439696190:role/CircleCI"
-    dockerfile: ./Dockerfile
-    profile_name: OIDC-USER
-    repo: test
-    tag: CIRCLE_SHA1
-
-  aws-ecs/deploy_service_update:
-    auth:
-      - aws-cli/setup:
-          profile_name: OIDC-USER
-          role_arn: "arn:aws:iam::777439696190:role/CircleCI"
-    cluster: test-cluster
-    container_image_name_updates: container=${test}-service,tag=${CIRCLE_SHA1}
-    family: test-service
-    profile_name: OIDC-USER
-    requires:
-      - aws-ecr/build_and_push_image
-
 workflows:
+  test_service:
+    jobs:
+      - test
+
+  build_and_deploy:
+    jobs:
+      - aws-ecr/build_and_push_image:
+          auth:
+            - aws-cli/setup:
+                profile_name: OIDC-USER
+                role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+          dockerfile: Dockerfile
+          path: .
+          profile_name: OIDC-USER
+          repo: test
+          tag: CIRCLE_SHA1
+
+      - aws-ecs/deploy_service_update:
+          auth:
+            - aws-cli/setup:
+                profile_name: OIDC-USER
+                role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+          cluster: test-cluster
+          container_image_name_updates: container=${test}-service,tag=${CIRCLE_SHA1}
+          family: test-service
+          profile_name: OIDC-USER
+          requires:
+            - aws-ecr/build_and_push_image
