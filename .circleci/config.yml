@@ -41,5 +41,6 @@ workflows:
           container_image_name_updates: container=test-service,tag=${CIRCLE_SHA1}
           family: test-service
           profile_name: OIDC-USER
+          region: us-east-1
           requires:
             - aws-ecr/build_and_push_image
