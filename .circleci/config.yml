@@ -20,6 +20,7 @@ workflows:
       - test
 
       - aws-ecr/build_and_push_image:
+          account_id: ${AWS_ACCOUNT_ID}
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
@@ -27,6 +28,7 @@ workflows:
           profile_name: OIDC-USER
           repo: test
           tag: ${CIRCLE_SHA1}
+          region: us-east-1
           requires:
             - test
 
