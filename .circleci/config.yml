@@ -38,7 +38,7 @@ workflows:
                 profile_name: OIDC-USER
                 role_arn: ${IAM_ARN}
           cluster: test-cluster
-          container_image_name_updates: container=test-service,tag=${CIRCLE_SHA1}
+          container_image_name_updates: container=test-container,tag=${CIRCLE_SHA1}
           family: test-service
           service_name: test-service
           profile_name: OIDC-USER
