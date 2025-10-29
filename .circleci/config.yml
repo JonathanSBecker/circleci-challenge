@@ -40,11 +40,9 @@ workflows:
             - aws-cli/setup:
                 profile_name: OIDC-USER
                 role_arn: ${IAM_ARN}
-          dockerfile: Dockerfile
-          path: .
           profile_name: OIDC-USER
           repo: test
-          tag: '$CIRCLE_SHA1,latest'
+          tag: testing
           requires:
             - test
 
