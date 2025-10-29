@@ -33,6 +33,7 @@ workflows:
             - test
 
       - aws-ecs/deploy_service_update:
+          account_id: ${AWS_ACCOUNT_ID}
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
@@ -40,6 +41,7 @@ workflows:
           cluster: test-cluster
           container_image_name_updates: container=test-service,tag=${CIRCLE_SHA1}
           family: test-service
+          service_name: test-service
           profile_name: OIDC-USER
           region: us-east-1
           requires:
