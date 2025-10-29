@@ -33,7 +33,6 @@ workflows:
   build_and_deploy:
     jobs:
       - test
-
       - aws-ecr/build_and_push_image:
           account_id: ${AWS_ACCOUNT_ID}
           auth:
@@ -44,7 +43,7 @@ workflows:
           path: .
           profile_name: OIDC-USER
           repo: test
-          tag: CIRCLE_SHA1
+          tag: ${CIRCLE_SHA1}
           requires:
             - test
 
