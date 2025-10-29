@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: Run Jest tests
-          command: npm test
+          command: npm install; npm test
 
   configure_role_arn:
     executor: aws-cli/default
