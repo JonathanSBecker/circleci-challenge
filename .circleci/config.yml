@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run Jest tests
+          name: Run tests
           command: npm install; npm test
 
   configure_role_arn:
@@ -21,37 +21,38 @@ jobs:
       - aws-cli/setup:
           profile_name: default
       - aws-cli/role_arn_setup:
-          role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+          role_arn: ${IAM_ARN}
           aws-region: 'us-east-1'
           source_profile: default
       - run: >-
           aws sts assume-role --role_arn
-          "arn:aws:iam::777439696190:role/CircleCI" --role_session_name
+          "${IAM_ARN}" --role_session_name
           AWSCLI-Session
 
 workflows:
-  test_service:
+  build_and_deploy:
     jobs:
       - test
 
-  build_and_deploy:
-    jobs:
       - aws-ecr/build_and_push_image:
+          account_id: {AWS_ACCOUNT_ID}
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
-                role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+                role_arn: ${IAM_ARN}
           dockerfile: Dockerfile
           path: .
           profile_name: OIDC-USER
           repo: test
           tag: CIRCLE_SHA1
+          requires:
+            - test
 
       - aws-ecs/deploy_service_update:
           auth:
             - aws-cli/setup:
                 profile_name: OIDC-USER
-                role_arn: "arn:aws:iam::777439696190:role/CircleCI"
+                role_arn: ${IAM_ARN}
           cluster: test-cluster
           container_image_name_updates: container=${test}-service,tag=${CIRCLE_SHA1}
           family: test-service
