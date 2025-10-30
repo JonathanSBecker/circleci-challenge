@@ -23,7 +23,7 @@ jobs:
           command: npm install
       - run:
           name: Run Tests
-          command: jest --forceExit
+          command: npm run test-jest
 
 
 workflows:

@@ -9,6 +9,7 @@
   "scripts": {
     "start": "npm run db-start; node --env-file ./.env src/server.js",
     "test": "npm run db-start; jest --forceExit; npm run db-stop",
+    "test-jest": "jest --forceExit",
     "db-start": "docker-compose up -d test-db dbmate-up --remove-orphans",
     "db-no-migrate": "docker-compose up -d test-db --remove-orphans",
     "db-stop": "docker compose down test-db",
