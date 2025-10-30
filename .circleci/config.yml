@@ -9,15 +9,13 @@ jobs:
   test:
     docker:
       - image: cimg/node:25.1.0
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: dbmate_demo
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: Spin up DB
-          command: docker-compose up -d test-db dbmate-up --remove-orphans
-      - run:
-          name: Docker PS
-          command: docker ps
       - run:
           name: NPM Install
           command: npm install
