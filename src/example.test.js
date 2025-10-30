@@ -13,6 +13,8 @@ describe('example', () => {
       .set("Content-Type", "application/json")
       .send({ name: 'test' });
 
+    console.log(process.env)
+
     console.log(res);
 
     expect(res.body).toBeDefined();
