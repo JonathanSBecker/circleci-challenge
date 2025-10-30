@@ -13,7 +13,7 @@ describe('example', () => {
       .set("Content-Type", "application/json")
       .send({ name: 'test' });
 
-    console.log(res.body);
+    console.log(res);
 
     expect(res.body).toBeDefined();
     expect(res.body.example).toBeDefined();
