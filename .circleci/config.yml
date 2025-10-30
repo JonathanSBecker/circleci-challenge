@@ -47,6 +47,9 @@ workflows:
           region: us-east-1
           requires:
             - test
+          filters:
+            branches:
+              only: main
 
       - aws-ecs/deploy_service_update:
           auth:
@@ -60,4 +63,7 @@ workflows:
           region: us-east-1
           requires:
             - aws-ecr/build_and_push_image
+          filters:
+            branches:
+              only: main
 
