@@ -1,5 +1,4 @@
 const request = require('supertest');
-const { execute } = require('./db');
 
 describe('example', () => {
   it('should be integrated', async () => {
@@ -7,6 +6,8 @@ describe('example', () => {
     process.env.MYSQL2_USER = 'root';
     process.env.MYSQL2_PASSWORD = 'password';
     process.env.MYSQL2_DATABASE = 'dbmate_demo';
+
+    const { execute } = require('./db');
 
     console.log(process.env)
     if (process.env.NODE_ENV === 'circle') {
