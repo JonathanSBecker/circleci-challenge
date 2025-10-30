@@ -8,8 +8,6 @@ describe('example', () => {
     process.env.MYSQL2_DATABASE = 'dbmate_demo';
 
     const { execute } = require('./db');
-
-    console.log(process.env)
     if (process.env.NODE_ENV === 'circle') {
       await execute({
         sql: `DROP TABLE IF EXISTS example`,
@@ -26,17 +24,14 @@ describe('example', () => {
             ) CHARSET utf8mb4
               ENGINE = InnoDB`
       });
+      console.log('table creation successful');
     }
-
-    console.log('table creation successful');
 
     const app = require('./index');
     const res = await request(app)
       .post('/')
       .set("Content-Type", "application/json")
       .send({ name: 'test' });
-
-    console.log(res);
 
     expect(res.body).toBeDefined();
     expect(res.body.example).toBeDefined();
