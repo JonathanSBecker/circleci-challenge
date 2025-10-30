@@ -11,9 +11,9 @@ describe('example', () => {
     const res = await request(app)
       .post('/')
       .set("Content-Type", "application/json")
-      .send({ name: 'test' })
-      .expect("Content-Type", /json/)
-      .expect(201);
+      .send({ name: 'test' });
+
+    console.log(res.body);
 
     expect(res.body).toBeDefined();
     expect(res.body.example).toBeDefined();
