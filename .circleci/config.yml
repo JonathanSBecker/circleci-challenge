@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.0.2
+  node: circleci/node@7.2.1
+  docker: circleci/docker@3.0.1
   aws-ecr: circleci/aws-ecr@9.7.0
   aws-cli: circleci/aws-cli@5.4.1
   aws-ecs: circleci/aws-ecs@7.1.0
@@ -44,3 +45,4 @@ workflows:
           region: us-east-1
           requires:
             - aws-ecr/build_and_push_image
+

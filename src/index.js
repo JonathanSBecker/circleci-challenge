@@ -3,7 +3,7 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 
 // DB LAYER
-dotenv.config();
+dotenv.config({ quiet: true });
 const { MYSQL2_URL, MYSQL2_USER, MYSQL2_PASSWORD, MYSQL2_DATABASE } =
     process.env;
 
@@ -49,7 +49,7 @@ const formatNamedParameters = (sql, params) => {
   const newSql = sql.replace(/:\w+/g, match => {
     const paramName = match.slice(1);
     if (!(paramName in params)) {
-      throw new SystemError(`Parameter '${paramName}' is missing`);
+      throw new Error(`Parameter '${paramName}' is missing`);
     }
 
     const paramValue = params[paramName];
@@ -164,6 +164,4 @@ app.get('/', async (req, res) => {
   return res.status(200).json({ examples });
 });
 
-app.listen(3000, () => {
-  console.log('Open on port 3000');
-});
+module.exports = app;
