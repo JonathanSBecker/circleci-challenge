@@ -11,6 +11,7 @@ jobs:
       - image: cimg/node:25.1.0
     steps:
       - checkout
+      - setup_remote_docker:
       - run:
           name: NPM Install
           command: npm install
