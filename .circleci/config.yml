@@ -13,11 +13,17 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Spin up DB
+          command: docker-compose up -d test-db dbmate-up --remove-orphans
+      - run:
+          name: Docker PS
+          command: docker ps
+      - run:
           name: NPM Install
           command: npm install
       - run:
           name: Run Tests
-          command: npm test
+          command: jest --forceExit
 
 
 workflows:
