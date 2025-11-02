@@ -32,7 +32,7 @@ services:
     image: amacneil/dbmate
     restart: on-failure
     environment:
-      DATABASE_URL: "mysql://test_user:bad_password_practices@${SQL_DOCKER_NAME}:3306/dbmate_demo"
+      DATABASE_URL: "mysql://test_user:bad_password_practices@$localhost:3306/dbmate_demo"
     volumes:
       - ./db/migrations:/db/migrations
     entrypoint: [ "dbmate", "up" ]
