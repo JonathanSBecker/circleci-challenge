@@ -33,7 +33,7 @@ jobs:
             cat .env
       - run:
           name: Apply DB Migrations
-          command: docker compose up -d dbmate-up-circle --remove-orphans
+          command: docker compose --verbose up -d dbmate-up-circle --remove-orphans
       - run:
           name: Run Tests
           command: npm run test-circle
