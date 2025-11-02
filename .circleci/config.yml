@@ -38,9 +38,6 @@ jobs:
               -e DATABASE_URL="mysql://test_user:bad_password_practices@${SQL_DOCKER_NAME}:3306/dbmate_demo" \
               ghcr.io/amacneil/dbmate up
       - run:
-          name: Apply DB Migrations
-          command:
-      - run:
           name: Run Tests
           command: npm run test-circle
 
