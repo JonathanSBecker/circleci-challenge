@@ -15,7 +15,7 @@ jobs:
           MYSQL_DATABASE: dbmate_demo
     steps:
       - checkout
-      - setup-remote-docker
+      - setup_remote_docker
       - run:
           name: NPM Install
           command: npm install
