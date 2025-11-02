@@ -32,7 +32,7 @@ jobs:
             echo SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}') > .env
       - run:
           name: Apply DB Migrations
-          command: docker run -rm -it --network=host -v "mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" ghcr.io/amacneil/dbmate up
+          command: docker run --rm -it --network=host -v "mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" ghcr.io/amacneil/dbmate up
       - run:
           name: Run Tests
           command: npm run test-circle
