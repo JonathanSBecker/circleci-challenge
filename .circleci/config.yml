@@ -29,11 +29,8 @@ jobs:
           command: |
             #!/bin/bash
             
-            SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
-            
-            echo SQL_DOCKER_NAME=${SQL_DOCKER_NAME} > .env
-            
-            npx dbmate up --migrations-dir "./db/migrations/" --url "mysql://test_user:bad_password_practices@${SQL_DOCKER_NAME}:3306/dbmate_demo"
+            echo SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}') > .env
+            cat .env
       - run:
           name: Apply DB Migrations
           command: docker compose up -d dbmate-up-circle --remove-orphans
