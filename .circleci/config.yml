@@ -15,12 +15,19 @@ jobs:
           MYSQL_DATABASE: dbmate_demo
     steps:
       - checkout
+      - setup-remote-docker
       - run:
           name: NPM Install
           command: npm install
       - run:
           name: Wait for MySQL to be ready
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Run Docker Compose
+          run: docker compose up -d test-db dbmate-up --remove-orphans
+      - run:
+          name: Docker PS
+          run: docker ps
       - run:
           name: Run Tests
           command: npm run test-circle
@@ -30,36 +37,3 @@ workflows:
   build_and_deploy:
     jobs:
       - test
-
-      - aws-ecr/build_and_push_image:
-          account_id: ${AWS_ACCOUNT_ID}
-          auth:
-            - aws-cli/setup:
-                profile_name: OIDC-USER
-                role_arn: ${IAM_ARN}
-          profile_name: OIDC-USER
-          repo: test
-          tag: ${CIRCLE_SHA1}
-          region: us-east-1
-          requires:
-            - test
-          filters:
-            branches:
-              only: main
-
-      - aws-ecs/deploy_service_update:
-          auth:
-            - aws-cli/setup:
-                profile_name: OIDC-USER
-                role_arn: ${IAM_ARN}
-          cluster: test-cluster
-          family: test-service
-          service_name: test-service
-          profile_name: OIDC-USER
-          region: us-east-1
-          requires:
-            - aws-ecr/build_and_push_image
-          filters:
-            branches:
-              only: main
-

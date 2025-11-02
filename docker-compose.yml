@@ -4,7 +4,9 @@ services:
     container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: "dbmate_demo"
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: bad_password_practices
+      MYSQL_DATABASE: dbmate_demo
     ports:
       - "3306:3306"
     volumes:
