@@ -24,10 +24,12 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: Run Docker Compose
-          command: docker compose up -d test-db dbmate-up --remove-orphans
+          command: docker compose up -d dbmate-up --remove-orphans
       - run:
           name: Docker PS
-          command: docker ps
+          command: >
+            SQL_DOCKER_NAME=$(docker ps | grep mysql | awk '{print $10}')
+            echo $SQL_DOCKER_NAME
       - run:
           name: Run Tests
           command: npm run test-circle

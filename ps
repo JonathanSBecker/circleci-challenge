@@ -1,0 +1,6 @@
+CONTAINER ID   IMAGE                                            COMMAND                  CREATED          STATUS                                     PORTS                                                    NAMES
+5b1d48556cc4   amacneil/dbmate                                  "dbmate up"              1 second ago     Up Less than a second                                                                               project-dbmate-up-1
+fded50d45efe   mysql:8.0                                        "docker-entrypoint.s…"   2 seconds ago    Up Less than a second (health: starting)   0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp, 33060/tcp   mysql-db
+a31b3f622c84   cimg/mysql:8.0                                   "docker-entrypoint.s…"   24 seconds ago   Up 21 seconds                                                                                       fervent_dirac
+99a6e225bd0e   cimg/node:25.1.0                                 "/bin/sh"                44 seconds ago   Up 21 seconds                                                                                       fervent_solomon
+6399ad9b911c   public.ecr.aws/eks-distro/kubernetes/pause:3.6   "/pause"                 56 seconds ago   Up 22 seconds                                                                                       amazing_bartik
