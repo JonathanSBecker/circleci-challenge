@@ -13,6 +13,8 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: dbmate_demo
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: bad_password_practices
     steps:
       - checkout
       - setup_remote_docker
@@ -23,18 +25,17 @@ jobs:
           name: Wait for MySQL to be ready
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
-          name: Run Docker Compose
-          command: docker compose up -d dbmate-up --remove-orphans
-      - run:
           name: Docker PS
           command: |
             #!/bin/bash
             
-            docker ps
-            
             SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
-            
             echo $SQL_DOCKER_NAME
+            echo $SQL_DOCKER_NAME > .env
+            cat .env
+      - run:
+          name: Apply DB Migrations
+          command: docker compose up -d dbmate-up-circle --remove-orphans
       - run:
           name: Run Tests
           command: npm run test-circle
