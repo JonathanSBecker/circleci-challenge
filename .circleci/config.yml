@@ -31,6 +31,7 @@ jobs:
             
             SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
             echo $SQL_DOCKER_NAME
+
             docker run --rm -it \
               --network=host \
               -v "$(pwd)/db:/db" \
