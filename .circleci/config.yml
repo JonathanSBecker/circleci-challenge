@@ -30,7 +30,7 @@ jobs:
             #!/bin/bash
             
             SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
-            echo $SQL_DOCKER_NAME > .env
+            echo SQL_DOCKER_NAME=${SQL_DOCKER_NAME} > .env
             cat .env
       - run:
           name: Apply DB Migrations
