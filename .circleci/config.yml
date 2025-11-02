@@ -27,8 +27,11 @@ jobs:
           command: docker compose up -d dbmate-up --remove-orphans
       - run:
           name: Docker PS
-          command: >
+          command: |
+            #!/bin/bash
+            
             SQL_DOCKER_NAME=$(docker ps | grep mysql | awk '{print $10}')
+            
             echo $SQL_DOCKER_NAME
       - run:
           name: Run Tests
