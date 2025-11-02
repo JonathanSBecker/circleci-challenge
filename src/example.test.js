@@ -28,7 +28,7 @@ describe('example', () => {
     // }
 
     const [rows] = await queryArray({
-      sql: `SHOW DATABASES`,
+      sql: `SHOW TABLES`,
       params: {}
     });
     console.log(rows);
