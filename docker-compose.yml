@@ -31,8 +31,6 @@ services:
   dbmate-up-circle:
     image: amacneil/dbmate
     restart: on-failure
-    depends_on:
-      - test-db
     environment:
       DATABASE_URL: "mysql://test_user:bad_password_practices@${SQL_DOCKER_NAME}:3306/dbmate_demo"
     volumes:
