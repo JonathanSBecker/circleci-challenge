@@ -24,10 +24,10 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: Run Docker Compose
-          run: docker compose up -d test-db dbmate-up --remove-orphans
+          command: docker compose up -d test-db dbmate-up --remove-orphans
       - run:
           name: Docker PS
-          run: docker ps
+          command: docker ps
       - run:
           name: Run Tests
           command: npm run test-circle
