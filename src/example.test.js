@@ -7,7 +7,7 @@ describe('example', () => {
     process.env.MYSQL2_PASSWORD = 'bad_password_practices';
     process.env.MYSQL2_DATABASE = 'dbmate_demo';
 
-    const { execute, query } = require('./db');
+    const { execute, queryArray } = require('./db');
     // if (process.env.NODE_ENV === 'circle') {
     //   await execute({
     //     sql: `DROP TABLE IF EXISTS example`,
@@ -27,7 +27,7 @@ describe('example', () => {
     //   console.log('table creation successful');
     // }
 
-    const [rows] = await query({
+    const [rows] = await queryArray({
       sql: `SHOW TABLES`,
       params: {}
     });
