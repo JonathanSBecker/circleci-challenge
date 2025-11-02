@@ -1,14 +1,13 @@
 const request = require('supertest');
-const {query} = require("./db");
 
 describe('example', () => {
   it('should be integrated', async () => {
     process.env.MYSQL2_URL = 'localhost';
-    process.env.MYSQL2_USER = 'root';
-    process.env.MYSQL2_PASSWORD = 'password';
+    process.env.MYSQL2_USER = 'test_user';
+    process.env.MYSQL2_PASSWORD = 'bad_password_practices';
     process.env.MYSQL2_DATABASE = 'dbmate_demo';
 
-    const { execute } = require('./db');
+    const { execute, query } = require('./db');
     // if (process.env.NODE_ENV === 'circle') {
     //   await execute({
     //     sql: `DROP TABLE IF EXISTS example`,

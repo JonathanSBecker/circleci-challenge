@@ -3,7 +3,7 @@ services:
     image: mysql:8.0
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: totally_safe_password
       MYSQL_USER: test_user
       MYSQL_PASSWORD: bad_password_practices
       MYSQL_DATABASE: dbmate_demo
