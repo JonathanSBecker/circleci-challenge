@@ -29,8 +29,8 @@ jobs:
           command: |
             #!/bin/bash
             
+            mysql -u root -ppassword -e 'SHOW DATABASES'
             SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
-            echo $SQL_DOCKER_NAME
             echo $SQL_DOCKER_NAME > .env
             cat .env
       - run:

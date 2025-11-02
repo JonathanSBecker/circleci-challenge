@@ -34,7 +34,7 @@ services:
     depends_on:
       - test-db
     environment:
-      DATABASE_URL: "mysql://root:password@${SQL_DOCKER_NAME}:3306/dbmate_demo"
+      DATABASE_URL: "mysql://test_user:bad_password_practices@${SQL_DOCKER_NAME}:3306/dbmate_demo"
     volumes:
       - ./db/migrations:/db/migrations
     entrypoint: [ "dbmate", "up" ]
