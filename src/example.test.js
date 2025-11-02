@@ -1,4 +1,5 @@
 const request = require('supertest');
+const {query} = require("./db");
 
 describe('example', () => {
   it('should be integrated', async () => {
@@ -26,6 +27,11 @@ describe('example', () => {
     //   });
     //   console.log('table creation successful');
     // }
+
+    const [rows] = await query({
+      sql: `SHOW TABLES`,
+      params: {}
+    });
 
     const app = require('./index');
     const res = await request(app)
