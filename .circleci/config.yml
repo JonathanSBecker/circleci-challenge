@@ -26,11 +26,7 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: Docker PS
-          command: |
-            #!/bin/bash
-            
-            echo SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}') > .env
-            cat .env
+          command: echo SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}') > .env
       - run:
           name: Apply DB Migrations
           command: docker compose --verbose up -d dbmate-up-circle --remove-orphans
