@@ -29,10 +29,6 @@ jobs:
           command: |
             #!/bin/bash
             
-            SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
-            echo $SQL_DOCKER_NAME
-
-            npx dbmate --help
             DATABASE_URL="mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo"
             echo "DATABASE_URL=$DATABASE_URL" >> .env
             npx dbmate up

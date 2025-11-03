@@ -7,42 +7,15 @@ describe('example', () => {
     process.env.MYSQL2_PASSWORD = 'bad_password_practices';
     process.env.MYSQL2_DATABASE = 'dbmate_demo';
 
-    const { execute, queryArray } = require('./db');
-    // if (process.env.NODE_ENV === 'circle') {
-    //   await execute({
-    //     sql: `DROP TABLE IF EXISTS example`,
-    //     params: {}
-    //   });
-    //   await execute({
-    //     sql: `
-    //         CREATE TABLE example
-    //         (
-    //             uuid      VARCHAR(36)  NOT NULL,
-    //             name      VARCHAR(255) NOT NULL,
-    //             createdAt DATETIME(3)  NOT NULL,
-    //             updatedAt DATETIME(3)  NOT NULL
-    //         ) CHARSET utf8mb4
-    //           ENGINE = InnoDB`
-    //   });
-    //   console.log('table creation successful');
-    // }
+    const app = require('./index');
+    const res = await request(app)
+      .post('/')
+      .set("Content-Type", "application/json")
+      .send({ name: 'test' });
 
-    const [rows] = await queryArray({
-      sql: `SHOW TABLES`,
-      params: {}
-    });
-    console.log(rows);
-    expect(true).toBe(true);
-
-    // const app = require('./index');
-    // const res = await request(app)
-    //   .post('/')
-    //   .set("Content-Type", "application/json")
-    //   .send({ name: 'test' });
-    //
-    // expect(res.body).toBeDefined();
-    // expect(res.body.example).toBeDefined();
-    // expect(res.body.example.name).toBe('test');
-    // expect(res.body.example.uuid).toBeDefined();
+    expect(res.body).toBeDefined();
+    expect(res.body.example).toBeDefined();
+    expect(res.body.example.name).toBe('test');
+    expect(res.body.example.uuid).toBeDefined();
   });
 });
