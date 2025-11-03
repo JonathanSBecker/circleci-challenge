@@ -32,11 +32,8 @@ jobs:
             SQL_DOCKER_NAME=$(docker ps | grep "cimg/mysql" | awk '{print $10}')
             echo $SQL_DOCKER_NAME
 
-            docker run --rm -it \
-              --network=host \
-              -v "$(pwd)/db:/db" \
-              -e DATABASE_URL="mysql://test_user:bad_password_practices@${SQL_DOCKER_NAME}:3306/dbmate_demo" \
-              ghcr.io/amacneil/dbmate up
+            npx dbmate --help
+            npx dbmate up --help
       - run:
           name: Run Tests
           command: npm run test-circle
