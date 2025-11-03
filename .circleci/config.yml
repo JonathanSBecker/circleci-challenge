@@ -34,11 +34,12 @@ jobs:
           command: npm run test-circle
 
 workflows:
-  always-run:
+  always_run:
     jobs:
       - run-tests
 
       - path-filtering/filter:
+          requires: run-tests
           name: check updated files
           mapping: |
             src/*.js run-build-and-deploy true
