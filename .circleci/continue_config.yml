@@ -40,14 +40,15 @@ jobs:
 
 workflows:
   run-tests:
+    unless: << pipeline.parameters.run-build-and-deploy >>
     jobs:
       - test
 
   build_and_deploy:
     when: << pipeline.parameters.run-build-and-deploy >>
-    requires:
-      run-tests
     jobs:
+      - test
+
       - aws-ecr/build_and_push_image:
           account_id: ${AWS_ACCOUNT_ID}
           auth:
@@ -58,6 +59,8 @@ workflows:
           repo: test
           tag: ${CIRCLE_SHA1}
           region: us-east-1
+          requires:
+            - test
           filters:
             branches:
               only: main
