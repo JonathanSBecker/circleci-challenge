@@ -34,7 +34,7 @@ jobs:
 
             npx dbmate --help
             DATABASE_URL="mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo"
-            echo DATABASE_URL
+            echo "DATABASE_URL=$DATABASE_URL" >> .env
             npx dbmate up
       - run:
           name: Run Tests
