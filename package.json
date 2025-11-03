@@ -2,8 +2,7 @@
   "name": "circleci-challenge",
   "version": "1.0.0",
   "description": "challenge for circle ci",
-  "license": "ISC",
-  "author": "",
+  "author": "JonathanSBecker",
   "type": "commonjs",
   "main": "src/index.js",
   "scripts": {
@@ -17,7 +16,7 @@
     "db-revert": "docker compose run --rm dbmate-down",
     "db-connect": " mysql -h localhost -P 3306 --protocol=tcp -u root -ppassword",
     "docker-build": "docker build -t circleci-challenge .",
-    "docker-run": "docker run -it -p 9000:3000 circleci-challenge"
+    "docker-run": "docker run -it -p 80:3000 circleci-challenge"
   },
   "dependencies": {
     "dotenv": "^17.2.3",

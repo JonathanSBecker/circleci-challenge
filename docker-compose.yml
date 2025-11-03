@@ -28,14 +28,5 @@ services:
       - ./db/migrations:/db/migrations
     entrypoint: ["dbmate", "up"]
 
-  dbmate-up-circle:
-    image: amacneil/dbmate
-    restart: on-failure
-    environment:
-      DATABASE_URL: "mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo"
-    volumes:
-      - ./db/migrations:/db/migrations
-    entrypoint: [ "dbmate", "up" ]
-
 volumes:
   mysql-data:

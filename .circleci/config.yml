@@ -26,12 +26,10 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: Set Docker Compose ENV
-          command: |
-            #!/bin/bash
-            
-            DATABASE_URL="mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo"
-            echo "DATABASE_URL=$DATABASE_URL" >> .env
-            npx dbmate up
+          command: echo "DATABASE_URL=mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" >> .env
+      - run:
+          name: Apply DB Migrations
+          command: npx dbmate up
       - run:
           name: Run Tests
           command: npm run test-circle
@@ -41,3 +39,35 @@ workflows:
   build_and_deploy:
     jobs:
       - test
+
+      - aws-ecr/build_and_push_image:
+          account_id: ${AWS_ACCOUNT_ID}
+          auth:
+            - aws-cli/setup:
+                profile_name: OIDC-USER
+                role_arn: ${IAM_ARN}
+          profile_name: OIDC-USER
+          repo: test
+          tag: ${CIRCLE_SHA1}
+          region: us-east-1
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
+
+      - aws-ecs/deploy_service_update:
+          auth:
+            - aws-cli/setup:
+                profile_name: OIDC-USER
+                role_arn: ${IAM_ARN}
+          cluster: test-cluster
+          family: test-service
+          service_name: test-service
+          profile_name: OIDC-USER
+          region: us-east-1
+          requires:
+            - aws-ecr/build_and_push_image
+          filters:
+            branches:
+              only: main
