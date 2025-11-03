@@ -11,7 +11,8 @@ parameters:
 
 workflows:
   always-run:
-    jobs:- path-filtering/filter:
+    jobs:
+      - path-filtering/filter:
           name: check updated files
           mapping: |
             src/*.js run-build-and-deploy true
