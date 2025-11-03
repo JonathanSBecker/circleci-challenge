@@ -4,13 +4,45 @@ orbs:
 
 setup: true
 
+jobs:
+  run-tests:
+    docker:
+      - image: cimg/node:25.1.0
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: dbmate_demo
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: bad_password_practices
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: NPM Install
+          command: npm install
+      - run:
+          name: Wait for MySQL to be ready
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Set Docker Compose ENV
+          command: echo "DATABASE_URL=mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" >> .env
+      - run:
+          name: Apply DB Migrations
+          command: npx dbmate up
+      - run:
+          name: Run Tests
+          command: npm run test-circle
+
 workflows:
   always-run:
     jobs:
+      - run-tests
+
       - path-filtering/filter:
           name: check updated files
           mapping: |
             src/*.js run-build-and-deploy true
+            ./package.json run-build-and-deploy true
             ./Dockerfile run-build-and-deploy true
             .circleci/config.yml run-build-and-deploy true
             .circleci/continue_config.yml run-build-and-deploy true

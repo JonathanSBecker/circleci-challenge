@@ -9,46 +9,10 @@ parameters:
     type: boolean
     default: false
 
-jobs:
-  test:
-    docker:
-      - image: cimg/node:25.1.0
-      - image: cimg/mysql:8.0
-        environment:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: dbmate_demo
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: bad_password_practices
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: NPM Install
-          command: npm install
-      - run:
-          name: Wait for MySQL to be ready
-          command: dockerize -wait tcp://localhost:3306 -timeout 1m
-      - run:
-          name: Set Docker Compose ENV
-          command: echo "DATABASE_URL=mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" >> .env
-      - run:
-          name: Apply DB Migrations
-          command: npx dbmate up
-      - run:
-          name: Run Tests
-          command: npm run test-circle
-
 workflows:
-  run-tests:
-    unless: << pipeline.parameters.run-build-and-deploy >>
-    jobs:
-      - test
-
   build_and_deploy:
     when: << pipeline.parameters.run-build-and-deploy >>
     jobs:
-      - test
-
       - aws-ecr/build_and_push_image:
           account_id: ${AWS_ACCOUNT_ID}
           auth:
@@ -59,8 +23,6 @@ workflows:
           repo: test
           tag: ${CIRCLE_SHA1}
           region: us-east-1
-          requires:
-            - test
           filters:
             branches:
               only: main
