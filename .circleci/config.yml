@@ -39,7 +39,6 @@ workflows:
       - run-tests
 
       - path-filtering/filter:
-          requires: run-tests
           name: check updated files
           mapping: |
             src/*.js run-build-and-deploy true
