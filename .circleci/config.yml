@@ -12,4 +12,6 @@ workflows:
           mapping: |
             src/*.js run-build-and-deploy true
             ./Dockerfile run-build-and-deploy true
+            .circleci/config.yml run-build-and-deploy true
+            .circleci/continue_config.yml run-build-and-deploy true
           base-revision: main

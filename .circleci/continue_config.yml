@@ -38,7 +38,7 @@ jobs:
           command: npm run test-circle
 
 workflows:
-  test:
+  run-tests:
     jobs:
       - test
 
