@@ -1,90 +1,19 @@
 version: 2.1
 orbs:
-  node: circleci/node@7.2.1
-  aws-ecr: circleci/aws-ecr@9.7.0
-  aws-cli: circleci/aws-cli@5.4.1
-  aws-ecs: circleci/aws-ecs@7.1.0
   path-filtering: circleci/path-filtering@1
+
+setup: true
 
 parameters:
   run-build-and-deploy:
     type: boolean
     default: false
 
-jobs:
-  test:
-    docker:
-      - image: cimg/node:25.1.0
-      - image: cimg/mysql:8.0
-        environment:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: dbmate_demo
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: bad_password_practices
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: NPM Install
-          command: npm install
-      - run:
-          name: Wait for MySQL to be ready
-          command: dockerize -wait tcp://localhost:3306 -timeout 1m
-      - run:
-          name: Set Docker Compose ENV
-          command: echo "DATABASE_URL=mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" >> .env
-      - run:
-          name: Apply DB Migrations
-          command: npx dbmate up
-      - run:
-          name: Run Tests
-          command: npm run test-circle
-
 workflows:
   always-run:
-    jobs:
-      - test
-
-      - path-filtering/filter:
+    jobs:- path-filtering/filter:
           name: check updated files
           mapping: |
             src/*.js run-build-and-deploy true
             ./Dockerfile run-build-and-deploy true
-            .circleci/config.yml run-build-and-deploy true
-
           base-revision: main
-
-  build_and_deploy:
-    when: << pipeline.parameters.run-build-and-deploy >>
-    jobs:
-      - aws-ecr/build_and_push_image:
-          account_id: ${AWS_ACCOUNT_ID}
-          auth:
-            - aws-cli/setup:
-                profile_name: OIDC-USER
-                role_arn: ${IAM_ARN}
-          profile_name: OIDC-USER
-          repo: test
-          tag: ${CIRCLE_SHA1}
-          region: us-east-1
-          requires:
-            - test
-          filters:
-            branches:
-              only: main
-
-      - aws-ecs/deploy_service_update:
-          auth:
-            - aws-cli/setup:
-                profile_name: OIDC-USER
-                role_arn: ${IAM_ARN}
-          cluster: test-cluster
-          family: test-service
-          service_name: test-service
-          profile_name: OIDC-USER
-          region: us-east-1
-          requires:
-            - aws-ecr/build_and_push_image
-          filters:
-            branches:
-              only: main
