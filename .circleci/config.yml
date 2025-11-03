@@ -4,11 +4,6 @@ orbs:
 
 setup: true
 
-parameters:
-  run-build-and-deploy:
-    type: boolean
-    default: false
-
 workflows:
   always-run:
     jobs:

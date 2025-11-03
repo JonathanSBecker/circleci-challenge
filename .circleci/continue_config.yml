@@ -3,6 +3,11 @@ orbs:
   aws-ecr: circleci/aws-ecr@9.7.0
   aws-ecs: circleci/aws-ecs@7.1.0
 
+parameters:
+  run-build-and-deploy:
+    type: boolean
+    default: false
+
 jobs:
   test:
     docker:
