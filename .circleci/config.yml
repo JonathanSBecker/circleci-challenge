@@ -33,7 +33,7 @@ jobs:
             echo $SQL_DOCKER_NAME
 
             npx dbmate --help
-            npx dbmate up --url "mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" --help
+            npx dbmate up ---url "mysql://test_user:bad_password_practices@localhost:3306/dbmate_demo" --help
       - run:
           name: Run Tests
           command: npm run test-circle
